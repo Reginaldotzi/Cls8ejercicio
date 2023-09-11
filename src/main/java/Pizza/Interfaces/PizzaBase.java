@@ -13,7 +13,7 @@ public class PizzaBase implements IPreparable {
 
     @Override
     public void prepare() {
-        System.out.println("La pizza se esta preparando");
+        System.out.println("La pizza se esta preparando :D");
     }
 
 

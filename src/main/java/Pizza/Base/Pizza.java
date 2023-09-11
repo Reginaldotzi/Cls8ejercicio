@@ -5,76 +5,63 @@ import java.util.Collections;
 import java.util.List;
 
 public class Pizza {
-    private String name;
+    public enum Tamaño { pequeña, mediana, grande}
 
-    //Eliminar la propieda price de la pizza y
-    //crear un metodo que se llame getPizzaprice
-    //haga la sumatoria de los inredientes y nos de el precio
-    //private double price;
-    private List<Topping> toppings = new ArrayList<>();
+    private String nombre;
+    private Tamaño tamaño;
+    private List<Topping> ingredientes = new ArrayList<>();
+    private double precioBase;
 
-    //    los tres puntos (...) en el parámetro Topping... toppings del constructor de la clase Pizza tienen
-//    un significado especial en Java.
-//    Estos three dots se llaman "spread operator" (operador de dispersión) y permiten pasar un
-//    conjunto de argumentos variádicos a un método. En este caso, el constructor de la clase Pizza
-//    espera una lista de objetos Topping, pero en lugar de especificar explícitamente la lista de
-//    objetos, se utiliza el operador de dispersión para pasar todos los argumentos restantes como una
-//    lista de objetos Topping.
-    public Pizza(String name, Topping... toppings) {
-        this.name = name;
-       // this.price = price;
-        for (Topping topping : toppings) {
-            this.toppings.add(topping);
+    public Pizza(String nombre, Tamaño tamaño) {
+        this.nombre = nombre;
+        this.tamaño = tamaño;
+        // Establecer el precio base dependiendo del tamaño
+        switch (tamaño) {
+            case mediana:
+                precioBase = 59.;
+                break;
+            case grande:
+                precioBase = 98.;
+                break;
+            default:
+                precioBase = 40;
+                break;
         }
     }
 
-    public void addTopping(Topping topping) {
-        this.toppings.add(topping);
+    public void agregarIngrediente(Topping ingrediente) {
+        this.ingredientes.add(ingrediente);
     }
 
-    public void removeTopping(int index) {
-        this.toppings.remove(index);
+    public List<Topping> getIngredientes() {
+        return Collections.unmodifiableList(new ArrayList<>(ingredientes));
     }
 
-    public List<Topping> getToppings() {
-
-        return Collections.unmodifiableList(new ArrayList<>(toppings));
+    public String getNombre() {
+        return nombre;
     }
 
-    public String getName() {
-        return name;
+    public double getPrecioPizza() {
+
+        double precioTotal = precioBase;
+        for (Topping ingrediente : ingredientes) {
+            precioTotal += ingrediente.getPrecioItem();
+        }
+        return precioTotal;
     }
 
+    public void preparar() {
+        System.out.println("Se esta Preparando " + tamaño.toString() + " " + nombre);
+        System.out.println("Agregando ingredientes:");
+        for (Topping ingrediente : ingredientes) {
+            System.out.println("- " + ingrediente.getNombre());
 
-    @Override
-    public String toString() {
-        return "Pizza{" + "name='" + name + '\'' + ", toppings=" + toppings + '}';
-    }
-
-    public void prepare() {
-        System.out.println("Preparing..... " + name);
-        System.out.println("Adding toppings:");
-        for (Topping topping : toppings) {
-            System.out.println("- " + topping.getNombre());
-            //put 1 second delay
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        System.out.println("The Pizza is ready!");
+        System.out.println("¡La pizza está lista!");
     }
-    public double getPizzaPrice(){
-        double total = 0;
-        for (Topping t: toppings){
-            total = total + t.getPriceItem();
-        }
-        return total;
-    }
-
-
-
-
-
 }
